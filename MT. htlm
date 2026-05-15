@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mercado Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --y:#FFD600;--b:#1a3a8c;--bd:#122870;--dk:#111827;
+  --gr:#f4f6fb;--gm:#e2e8f0;--gt:#6b7280;--wh:#fff;
+  --gn:#16a34a;--rd:#dc2626;
+  --fd:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.06);
+  --shh:0 8px 32px rgba(0,0,0,.14);--r:12px
+}
+body{font-family:var(--fb);color:var(--dk);background:#fff;min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--dk);color:#94a3b8;font-size:11.5px;padding:6px 16px;text-align:center;letter-spacing:.3px}
+
+/* ── ADMIN BAR ── */
+.admin-bar{display:none;background:#dc2626;color:#fff;padding:8px 20px;font-size:13px;font-weight:700;letter-spacing:.3px;position:sticky;top:0;z-index:101}
+.admin-bar.show{display:flex;align-items:center;justify-content:center;gap:16px}
+.btn-admin-exit{background:rgba(255,255,255,.2);border:none;color:#fff;font-size:12px;font-weight:700;padding:5px 13px;border-radius:6px;cursor:pointer}
+.btn-admin-exit:hover{background:rgba(255,255,255,.35)}
+
+/* ── HEADER ── */
+header{background:var(--y);padding:10px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.admin-bar.show ~ header{top:36px}
+.hi{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0}
+.logo-box{width:40px;height:40px;background:var(--b);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-box svg{width:22px;height:22px;fill:var(--y)}
+.logo-txt strong{display:block;font-family:var(--fd);font-size:21px;font-weight:900;color:var(--b);line-height:1}
+.logo-txt span{font-family:var(--fd);font-size:12px;font-weight:700;color:#2549b0;letter-spacing:.5px}
+.searchbar{flex:1;display:flex;background:#fff;border-radius:9px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.searchbar input{flex:1;border:none;padding:11px 14px;font-family:var(--fb);font-size:14px;outline:none;color:var(--dk)}
+.searchbar button{background:var(--b);border:none;padding:0 16px;cursor:pointer;transition:background .2s}
+.searchbar button:hover{background:var(--bd)}
+.searchbar button svg{width:18px;height:18px;fill:#fff;display:block}
+.hactions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btnlink{font-family:var(--fb);font-size:13px;font-weight:600;color:var(--b);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;padding:8px 10px;border-radius:8px;transition:background .2s;white-space:nowrap}
+.btnlink:hover{background:rgba(26,58,140,.10)}
+.btnlink svg{width:17px;height:17px;fill:var(--b)}
+.btnprimary{background:var(--b);color:#fff;font-family:var(--fd);font-size:15px;font-weight:700;border:none;padding:10px 20px;border-radius:9px;cursor:pointer;transition:background .2s;white-space:nowrap}
+.btnprimary:hover{background:var(--bd)}
+
+/* ── NAV ── */
+nav{background:var(--b);border-bottom:3px solid var(--y)}
+.ni{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;overflow-x:auto;scrollbar-width:none}
+.ni::-webkit-scrollbar{height:0}
+.nitem{font-family:var(--fb);font-size:13px;font-weight:600;color:rgba(255,255,255,.75);padding:11px 14px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-3px;flex-shrink:0;transition:color .2s}
+.nitem:hover,.nitem.active{color:var(--y);border-bottom-color:var(--y)}
+.nitem.contact{margin-left:auto;color:var(--y)}
+.nitem.contact:hover{color:#fff}
+
+/* ── HERO ── */
+.hero{background:var(--y);padding:32px 0 0}
+.hero-in{max-width:1240px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:1fr 1fr auto;gap:24px;align-items:end}
+.hero-txt{padding-bottom:40px}
+.hero-txt h1{font-family:var(--fd);font-size:52px;font-weight:900;line-height:.95;margin-bottom:14px;letter-spacing:-1px}
+.hero-txt p{font-size:15px;color:#1e293b;margin-bottom:24px;line-height:1.55}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-hy{background:var(--b);color:#fff;font-family:var(--fd);font-size:16px;font-weight:700;padding:13px 28px;border-radius:9px;border:none;cursor:pointer;transition:background .2s}
+.btn-hy:hover{background:var(--bd)}
+.btn-ho{background:#fff;color:var(--b);font-family:var(--fd);font-size:16px;font-weight:700;padding:13px 28px;border-radius:9px;border:2.5px solid var(--b);cursor:pointer;transition:background .2s,color .2s}
+.btn-ho:hover{background:var(--b);color:#fff}
+.hero-chips{background:rgba(26,58,140,.08);border-radius:16px 16px 0 0;padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.chip{background:#fff;border-radius:9px;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--b);cursor:pointer;box-shadow:var(--sh);transition:transform .15s}
+.chip:hover{transform:translateY(-2px)}
+.chip span{display:block;font-size:22px;margin-bottom:4px}
+.hero-feats{background:#fff;border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--sh);margin-bottom:40px}
+.hfeat{display:flex;align-items:center;gap:12px}
+.hfeat-icon{width:36px;height:36px;background:var(--gr);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hfeat-txt strong{display:block;font-size:13px;font-weight:700}
+.hfeat-txt span{font-size:12px;color:var(--gt)}
+
+/* ── CATS ── */
+.cats{background:#fff;border-bottom:1px solid var(--gm);padding:18px 0}
+.cats-in{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.cats-in::-webkit-scrollbar{height:0}
+.catcard{flex-shrink:0;border:1.5px solid var(--gm);border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:155px;transition:border-color .2s,box-shadow .2s,transform .15s;background:#fff}
+.catcard:hover{border-color:var(--b);box-shadow:var(--shh);transform:translateY(-2px)}
+.catcard .ci{font-size:26px}
+.catcard strong{display:block;font-size:12.5px;font-weight:700}
+.catcard small{font-size:11px;color:var(--gt)}
+.catcard a{font-size:11px;color:var(--b);display:block;margin-top:2px;font-weight:600}
+
+/* ── SECTIONS ── */
+.sec{padding:28px 0}
+.sec.gray{background:var(--gr)}
+.sec-in{max-width:1240px;margin:0 auto;padding:0 16px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-hd h2{font-family:var(--fd);font-size:28px;font-weight:800}
+.seeall{font-size:13px;font-weight:700;color:var(--b);cursor:pointer;text-decoration:none}
+
+/* ── LAYOUT ── */
+.prodlayout{display:grid;grid-template-columns:1fr 272px;gap:20px;align-items:start}
+
+/* ══════════════════════════════════════════════
+   PRODUCT GRID — damero responsive
+   Desktop: 4 col · Tablet: 3 col · Móvil: 2 col
+══════════════════════════════════════════════ */
+.prodgrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+@media(max-width:1100px){.prodgrid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px) {.prodgrid{grid-template-columns:repeat(2,1fr);gap:10px}}
+
+/* ══════════════════════════════════════════════
+   PRODUCT CARDS — dos tipos visuales
+══════════════════════════════════════════════ */
+.pcard{
+  background:#fff;border:1.5px solid var(--gm);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;position:relative;
+  transition:border-color .2s,box-shadow .2s,transform .2s;
+  display:flex;flex-direction:column;
+}
+.pcard:hover{border-color:var(--b);box-shadow:var(--shh);transform:translateY(-3px)}
+.pcard.tipo-mt     {border-top:3px solid var(--b)}
+.pcard.tipo-tecnico{border-top:3px solid var(--y)}
+
+.pimg{height:130px;background:var(--gr);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.pimg img{width:100%;height:100%;object-fit:cover}
+.pimg .emoji{font-size:44px}
+
+.pbadge{position:absolute;top:7px;left:7px;font-size:10px;font-weight:800;padding:3px 7px;border-radius:5px;letter-spacing:.3px}
+.pbadge.mt      {background:var(--b);color:#fff}
+.pbadge.offer   {background:var(--rd);color:#fff}
+.pbadge.new     {background:var(--gn);color:#fff}
+.pbadge.featured{background:#7c3aed;color:#fff}
+.pbadge.used    {background:#64748b;color:#fff}
+
+.pbody{padding:10px 11px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pname{font-size:12.5px;font-weight:600;line-height:1.3;color:var(--dk)}
+.pprice{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--dk);line-height:1.1}
+.ploc{font-size:11px;color:var(--gt)}
+.stars{color:#f59e0b;font-size:11px;display:flex;align-items:center;gap:2px}
+.stars span{color:var(--gt);font-size:10.5px}
+
+.pcard-footer{padding:0 11px 10px;display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto}
+.pseller{font-size:11px;font-weight:600;color:var(--b);display:flex;align-items:center;gap:4px;min-width:0;overflow:hidden}
+.pseller-av{width:20px;height:20px;border-radius:50%;background:var(--b);color:#fff;font-family:var(--fd);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-wa-card{background:#25D366;color:#fff;font-size:10.5px;font-weight:700;padding:5px 9px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;text-decoration:none;white-space:nowrap;transition:background .2s;flex-shrink:0}
+.btn-wa-card:hover{background:#1ebe5d}
+.btn-wa-card svg{width:11px;height:11px;fill:#fff;flex-shrink:0}
+
+/* ── ADMIN delete button ── */
+.btn-delete-card{display:none;position:absolute;top:6px;right:6px;background:#dc2626;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:800;padding:4px 9px;cursor:pointer;z-index:10;line-height:1.4;transition:background .2s}
+.btn-delete-card:hover{background:#b91c1c}
+.admin-mode .pcard{position:relative}
+.admin-mode .btn-delete-card{display:block}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.sb-yellow{background:var(--y);border-radius:var(--r);padding:20px;text-align:center}
+.sb-yellow h3{font-family:var(--fd);font-size:22px;font-weight:900;color:var(--b);margin-bottom:6px}
+.sb-yellow p{font-size:13px;color:#1e293b;margin-bottom:14px;line-height:1.5}
+.sb-white{background:#fff;border:1.5px solid var(--gm);border-radius:var(--r);padding:16px}
+.sb-white h4{font-family:var(--fd);font-size:19px;font-weight:800;margin-bottom:12px}
+.fsel{width:100%;padding:10px 11px;border:1.5px solid var(--gm);border-radius:8px;font-family:var(--fb);font-size:13px;background:#fff;margin-bottom:10px;outline:none;cursor:pointer;transition:border-color .2s}
+.fsel:focus{border-color:var(--b)}
+.btnblock{width:100%;background:var(--b);color:#fff;font-family:var(--fd);font-size:16px;font-weight:700;padding:11px;border-radius:9px;border:none;cursor:pointer;transition:background .2s}
+.btnblock:hover{background:var(--bd)}
+.btnoutline{width:100%;background:#fff;color:var(--b);font-family:var(--fd);font-size:14px;font-weight:700;padding:10px;border-radius:9px;border:2.5px solid var(--b);cursor:pointer;transition:background .2s,color .2s}
+.btnoutline:hover{background:var(--b);color:#fff}
+.btnwa-block{width:100%;background:#25D366;color:#fff;font-family:var(--fd);font-size:15px;font-weight:700;padding:11px;border-radius:9px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:background .2s}
+.btnwa-block:hover{background:#1ebe5d}
+.btnwa-block svg{width:18px;height:18px;fill:#fff;flex-shrink:0}
+.seeall-sm{display:block;text-align:center;font-size:12px;color:var(--b);margin-top:10px;cursor:pointer;font-weight:600}
+
+/* ── TECHNICIANS ── */
+.techgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.tcard{background:#fff;border:1.5px solid var(--gm);border-radius:var(--r);padding:18px;transition:border-color .2s,box-shadow .2s,transform .2s;border-top:3px solid var(--y)}
+.tcard:hover{border-color:#e6c000;box-shadow:var(--shh);transform:translateY(-2px)}
+.thead2{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.tavatar{width:48px;height:48px;border-radius:50%;background:var(--b);color:#fff;font-family:var(--fd);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tname strong{display:block;font-size:14px;font-weight:700}
+.tname small{font-size:12px;color:var(--gt);display:block;margin-top:1px}
+.ttags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.tag{background:#eef2ff;color:var(--b);font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px}
+.tfoot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.btnwa{background:#25D366;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:7px;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;text-decoration:none;transition:background .2s;white-space:nowrap}
+.btnwa:hover{background:#1ebe5d}
+.btnwa svg{width:13px;height:13px;fill:#fff;flex-shrink:0}
+
+/* ── COURSES ── */
+.crgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.crcard{background:#fff;border:1.5px solid var(--gm);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s}
+.crcard:hover{border-color:#e6c000;box-shadow:var(--shh);transform:translateY(-2px)}
+.crimg{background:linear-gradient(135deg,var(--b),#2549b0);height:100px;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.crmode{position:absolute;top:8px;right:8px;background:var(--y);color:var(--b);font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px}
+.crbody{padding:14px}
+.crbody h4{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.3}
+.inst{font-size:12px;color:var(--gt);margin-bottom:9px}
+.crfoot{display:flex;align-items:center;justify-content:space-between}
+.crprice{font-family:var(--fd);font-size:19px;font-weight:800;color:var(--b)}
+.crprice.free{color:var(--gn)}
+
+/* ── CONTACT SECTION ── */
+.contact-sec{background:var(--b);padding:40px 0}
+.contact-in{max-width:680px;margin:0 auto;padding:0 20px;text-align:center}
+.contact-in h2{font-family:var(--fd);font-size:36px;font-weight:900;color:#fff;margin-bottom:10px}
+.contact-in p{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:28px;line-height:1.6}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.contact-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:18px;text-align:center}
+.contact-item .ico{font-size:28px;margin-bottom:8px}
+.contact-item strong{display:block;font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.contact-item span{font-size:13px;color:rgba(255,255,255,.6)}
+.contact-item a{color:var(--y);text-decoration:none;font-weight:700}
+.contact-item a:hover{text-decoration:underline}
+.btn-wa-contact{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;font-family:var(--fd);font-size:18px;font-weight:800;padding:15px 36px;border-radius:10px;text-decoration:none;transition:background .2s}
+.btn-wa-contact:hover{background:#1ebe5d}
+.btn-wa-contact svg{width:22px;height:22px;fill:#fff}
+
+/* ── VALUE PROPS ── */
+.vp{background:var(--gr);padding:26px 0;border-top:1px solid var(--gm)}
+.vpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px}
+.vpi{display:flex;align-items:center;gap:10px}
+.vpi .ico{font-size:26px}
+.vpi strong{display:block;font-size:13px;font-weight:700}
+.vpi span{font-size:12px;color:var(--gt)}
+
+/* ── FOOTER ── */
+footer{background:var(--dk);color:rgba(255,255,255,.6);padding:36px 0 18px}
+.fin{max-width:1240px;margin:0 auto;padding:0 16px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:28px;margin-bottom:28px}
+.fbrand p{font-size:13px;margin-top:10px;line-height:1.65}
+.fcol h5{font-family:var(--fd);font-size:15px;font-weight:800;color:#fff;margin-bottom:11px;letter-spacing:.3px}
+.fcol ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.fcol ul li a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;cursor:pointer;transition:color .2s}
+.fcol ul li a:hover{color:var(--y)}
+.fbot{border-top:1px solid rgba(255,255,255,.08);padding-top:14px;display:flex;justify-content:space-between;align-items:center;font-size:12px;flex-wrap:wrap;gap:8px}
+
+/* Admin gear in footer — visible but subtle */
+.admin-gear{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.5);font-size:13px;font-weight:700;
+  padding:5px 12px;border-radius:6px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+  transition:background .2s,color .2s;
+  user-select:none;
+}
+.admin-gear:hover{background:rgba(255,255,255,.15);color:#fff}
+.admin-gear.active{background:var(--rd);color:#fff;border-color:var(--rd)}
+
+/* ── OVERLAY & MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.mclose{position:absolute;top:13px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--gt);line-height:1;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.mclose:hover{background:var(--gr)}
+.modal h3{font-family:var(--fd);font-size:25px;font-weight:800;margin-bottom:5px}
+.mdesc{font-size:14px;color:var(--gt);margin-bottom:18px;line-height:1.5}
+.mtabs{display:flex;border:1.5px solid var(--gm);border-radius:9px;overflow:hidden;margin-bottom:18px}
+.mtab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;background:#fff;border:none;font-family:var(--fb);transition:background .2s,color .2s}
+.mtab.active{background:var(--b);color:#fff}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:13px;font-weight:700;margin-bottom:5px;color:var(--dk)}
+.fi{width:100%;padding:10px 12px;border:1.5px solid var(--gm);border-radius:8px;font-family:var(--fb);font-size:14px;outline:none;transition:border-color .2s;color:var(--dk)}
+.fi:focus{border-color:var(--b)}
+textarea.fi{resize:vertical}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ferr{color:var(--rd);font-size:13px;margin-bottom:11px;display:none;padding:9px 12px;background:#fef2f2;border-radius:7px;border:1px solid #fecaca}
+.radio-row{display:flex;gap:8px;flex-wrap:wrap}
+.ropt{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;cursor:pointer;padding:7px 12px;border:1.5px solid var(--gm);border-radius:8px;transition:border-color .2s,background .2s}
+.ropt input{accent-color:var(--b);cursor:pointer}
+.ropt:has(input:checked){border-color:var(--b);background:#eef2ff;color:var(--b)}
+
+/* Phone field */
+.ph-wrap{display:flex;align-items:stretch;border:1.5px solid var(--gm);border-radius:8px;overflow:hidden;transition:border-color .2s}
+.ph-wrap:focus-within{border-color:var(--b)}
+.ph-prefix{padding:0 12px;background:#f0f4ff;color:var(--b);font-weight:800;font-size:13px;border-right:1.5px solid var(--gm);display:flex;align-items:center;white-space:nowrap;flex-shrink:0}
+.ph-input{flex:1;border:none;padding:10px 12px;font-family:var(--fb);font-size:14px;outline:none;color:var(--dk);min-width:0}
+.ph-hint{display:block;margin-top:4px;font-size:11px;color:var(--gt)}
+
+/* Photos */
+.pzone{border:2.5px dashed var(--gm);border-radius:11px;padding:28px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:var(--gr);transition:border-color .2s,background .2s;text-align:center;user-select:none}
+.pzone:hover,.pzone.dragover{border-color:var(--b);background:#eef2ff}
+.pzone .pzico{font-size:36px}
+.pzone strong{font-size:14px;color:var(--b);font-weight:700}
+.pzone small{font-size:12px;color:var(--gt)}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pthumb{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;border:2px solid var(--gm);cursor:pointer;transition:border-color .2s}
+.pthumb:hover{border-color:var(--b)}
+.pthumb.pmain{border-color:var(--b);border-width:2.5px}
+.pthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pmainbadge{position:absolute;bottom:0;left:0;right:0;background:rgba(26,58,140,.88);color:#fff;font-size:10px;font-weight:800;text-align:center;padding:3px}
+.prmv{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(0,0,0,.7);color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;transition:background .2s}
+.prmv:hover{background:var(--rd)}
+.paddmore{border:2px dashed var(--gm);border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--gt);font-size:20px;gap:2px;transition:border-color .2s,color .2s}
+.paddmore:hover{border-color:var(--b);color:var(--b)}
+.paddmore small{font-size:11px}
+.photoerr{color:var(--rd);font-size:12px;margin-top:5px}
+
+/* ── PRODUCT DETAIL PAGE (full screen overlay) ── */
+.detail-page{
+  display:none;position:fixed;inset:0;background:#fff;
+  z-index:400;overflow-y:auto;
+}
+.detail-page.open{display:block}
+.detail-header{background:var(--y);padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.detail-back{background:var(--b);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:var(--fd);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
+.detail-back:hover{background:var(--bd)}
+.detail-title{font-family:var(--fd);font-size:17px;font-weight:800;color:var(--b);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.detail-body{max-width:680px;margin:0 auto;padding:20px 16px 40px}
+.detail-gallery{margin-bottom:18px}
+.detail-main-img{width:100%;height:260px;object-fit:cover;border-radius:12px;display:block;margin-bottom:8px}
+.detail-main-emoji{width:100%;height:200px;background:var(--gr);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:8px}
+.detail-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.detail-thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid var(--gm);flex-shrink:0;transition:border-color .2s}
+.detail-thumbs img.active{border-color:var(--b)}
+.detail-badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.detail-badge{font-size:11px;font-weight:800;padding:3px 10px;border-radius:5px;letter-spacing:.3px}
+.detail-badge.mt      {background:var(--b);color:#fff}
+.detail-badge.tecnico {background:var(--y);color:var(--b)}
+.detail-badge.offer   {background:var(--rd);color:#fff}
+.detail-badge.new     {background:var(--gn);color:#fff}
+.detail-badge.featured{background:#7c3aed;color:#fff}
+.detail-price{font-family:var(--fd);font-size:38px;font-weight:900;color:var(--dk);line-height:1;margin-bottom:6px}
+.detail-name{font-size:18px;font-weight:700;line-height:1.3;margin-bottom:10px;color:var(--dk)}
+.detail-meta{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.detail-meta span{font-size:13px;color:var(--gt);display:flex;align-items:center;gap:5px}
+.detail-desc{font-size:14px;color:#374151;line-height:1.7;margin-bottom:20px;padding:14px;background:var(--gr);border-radius:10px}
+.detail-stars{display:flex;align-items:center;gap:6px;font-size:14px;color:#f59e0b;margin-bottom:22px}
+.detail-stars span{color:var(--gt);font-size:13px}
+.detail-actions{display:flex;flex-direction:column;gap:11px}
+.pay-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.pay-opt{border:2px solid var(--gm);border-radius:11px;padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:border-color .2s,background .2s}
+.pay-opt:hover{border-color:var(--b);background:#f8f9ff}
+.pay-opt.sel{border-color:var(--b);background:#eef2ff}
+.pay-opt-ico{font-size:26px;flex-shrink:0}
+.pay-opt-txt strong{display:block;font-size:14px;font-weight:700}
+.pay-opt-txt span{font-size:12px;color:var(--gt)}
+.pay-detail{background:var(--gr);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.85}
+.pay-detail strong{display:block;font-size:14px;font-weight:800;margin-bottom:7px}
+.pay-warn{background:#fffbeb;border:1.5px solid var(--y);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.75}
+.pay-warn strong{display:block;font-weight:800;margin-bottom:6px}
+.secure{text-align:center;font-size:11px;color:var(--gt);margin-top:10px}
+
+/* ── MODAL for login/tech/publish ── */
+.gall-main{width:100%;height:220px;object-fit:cover;display:block;border-radius:9px;margin-bottom:8px}
+.gall-thumbs{display:flex;gap:7px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px}
+.gall-thumbs img{width:54px;height:54px;object-fit:cover;border-radius:7px;cursor:pointer;border:2px solid var(--gm);flex-shrink:0;transition:border-color .2s}
+.gall-thumbs img.active{border-color:var(--b)}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--dk);color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:500;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;box-shadow:var(--shh);pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .hero-in{grid-template-columns:1fr}
+  .hero-chips,.hero-feats{display:none}
+  .prodlayout{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .hi{flex-wrap:wrap}
+  .searchbar{order:3;flex:0 0 100%}
+  .hactions .btnlink span{display:none}
+  .fgrid{grid-template-columns:1fr}
+  .hero-txt h1{font-size:38px}
+  .frow{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">🔥 Envíos a todo el país &nbsp;·&nbsp; Vendedores verificados &nbsp;·&nbsp; Soporte WhatsApp</div>
+
+<div class="admin-bar" id="adminBar">
+  <span>🛡️ MODO ADMINISTRADOR ACTIVO</span>
+  <button class="btn-admin-exit" id="btnAdminExit">Salir</button>
+</div>
+
+<header>
+  <div class="hi">
+    <a href="#" class="logo" id="logoHome">
+      <div class="logo-box">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 15.93V17a1 1 0 00-2 0v.93A8 8 0 014.07 12H5a1 1 0 000-2h-.93A8 8 0 0111 4.07V5a1 1 0 002 0v-.93A8 8 0 0119.93 10H19a1 1 0 000 2h.93A8 8 0 0113 17.93z"/></svg>
+      </div>
+      <div class="logo-txt"><strong>MERCADO</strong><span>TÉCNICO</span></div>
+    </a>
+    <div class="searchbar">
+      <input type="text" id="searchInput" placeholder="Buscar repuestos, herramientas o servicios...">
+      <button id="btnSearch">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+    </div>
+    <div class="hactions">
+      <button class="btnlink" id="btnLogin">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Ingresar</span>
+      </button>
+      <button class="btnprimary" id="btnPublicar">Publicar gratis</button>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="ni">
+    <div class="nitem active" data-cat="">☰ Categorías</div>
+    <div class="nitem" data-cat="refrigeracion">Refrigeración y Aire</div>
+    <div class="nitem" data-cat="lavarropas">Lavarropas</div>
+    <div class="nitem" data-cat="cocinas">Cocinas y Hornos</div>
+    <div class="nitem" data-cat="herramientas">Herramientas</div>
+    <div class="nitem" data-cat="usados">Equipos Usados</div>
+    <div class="nitem" data-sec="cursos">Cursos</div>
+    <div class="nitem" data-sec="tecnicos">Técnicos</div>
+    <div class="nitem contact" data-sec="contacto">✉ Contacto</div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-txt">
+      <h1>Todo para el técnico<br>y el reparador</h1>
+      <p>El marketplace especializado en refrigeración,<br>lavarropas y cocinas.</p>
+      <div class="hero-btns">
+        <button class="btn-hy" data-sec="productos">Explorar productos</button>
+        <button class="btn-ho" id="btnPublicar2">Publicar ahora</button>
+      </div>
+    </div>
+    <div class="hero-chips">
+      <div class="chip"><span>🌡️</span>Termocuplas</div>
+      <div class="chip"><span>❄️</span>Gas R32</div>
+      <div class="chip"><span>⚙️</span>Compresores</div>
+      <div class="chip"><span>🔧</span>Manifolds</div>
+      <div class="chip"><span>💧</span>Bombas</div>
+      <div class="chip"><span>📟</span>PCBs</div>
+      <div class="chip"><span>🌀</span>Motores</div>
+      <div class="chip"><span>🔩</span>Válvulas</div>
+      <div class="chip"><span>📦</span>Más...</div>
+    </div>
+    <div class="hero-feats">
+      <div class="hfeat"><div class="hfeat-icon">🔩</div><div class="hfeat-txt"><strong>Miles de repuestos</strong><span>para profesionales</span></div></div>
+      <div class="hfeat"><div class="hfeat-icon">✅</div><div class="hfeat-txt"><strong>Vendedores verificados</strong><span>y confiables</span></div></div>
+      <div class="hfeat"><div class="hfeat-icon">🚚</div><div class="hfeat-txt"><strong>Envíos a todo el país</strong><span>de forma segura</span></div></div>
+      <div class="hfeat"><div class="hfeat-icon">💬</div><div class="hfeat-txt"><strong>Soporte técnico</strong><span>por WhatsApp</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cats">
+  <div class="cats-in">
+    <div class="catcard" data-cat="refrigeracion"><span class="ci">❄️</span><div><strong>Refrigeración y Aire</strong><small>Acondicionado</small><a>Ver categorías ›</a></div></div>
+    <div class="catcard" data-cat="lavarropas"><span class="ci">🌀</span><div><strong>Lavarropas</strong><small>Repuestos y partes</small><a>Ver categorías ›</a></div></div>
+    <div class="catcard" data-cat="cocinas"><span class="ci">🍳</span><div><strong>Cocinas y Hornos</strong><small>Repuestos y accesorios</small><a>Ver categorías ›</a></div></div>
+    <div class="catcard" data-cat="herramientas"><span class="ci">🔧</span><div><strong>Herramientas</strong><small>Equipos e instrumentos</small><a>Ver categorías ›</a></div></div>
+    <div class="catcard" data-cat="usados"><span class="ci">♻️</span><div><strong>Equipos Usados</strong><small>Oportunidades</small><a>Ver productos ›</a></div></div>
+    <div class="catcard" data-sec="cursos"><span class="ci">🎓</span><div><strong>Cursos Técnicos</strong><small>Online y presenciales</small><a>Ver cursos ›</a></div></div>
+  </div>
+</div>
+
+<section class="sec" id="productos">
+  <div class="sec-in">
+    <div class="sec-hd"><h2>Productos destacados</h2><a class="seeall" id="verTodos">Ver todos ›</a></div>
+    <div class="prodlayout">
+      <div class="prodgrid" id="prodGrid"></div>
+      <div class="sidebar">
+        <div class="sb-yellow">
+          <h3>¿Sos técnico?</h3>
+          <p>Sumate al directorio y recibí más clientes en tu zona.</p>
+          <button class="btnoutline" id="btnTechModal">Crear perfil de técnico</button>
+        </div>
+        <div class="sb-white">
+          <h4>Buscar técnicos</h4>
+          <select class="fsel" id="filtCiudad">
+            <option value="">Seleccioná ciudad</option>
+            <option>Buenos Aires</option><option>Córdoba</option>
+            <option>Rosario</option><option>Mendoza</option><option>La Plata</option>
+          </select>
+          <select class="fsel" id="filtEsp">
+            <option value="">Especialidad</option>
+            <option>Refrigeración</option><option>Aire Acondicionado</option>
+            <option>Lavarropas</option><option>Cocinas y Hornos</option>
+          </select>
+          <button class="btnblock" id="btnBuscarTech">Buscar técnico</button>
+          <a class="seeall-sm" id="verTodosTech">Ver todos los técnicos ›</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gray" id="tecnicos">
+  <div class="sec-in">
+    <div class="sec-hd"><h2>Técnicos verificados</h2></div>
+    <div class="techgrid" id="techGrid"></div>
+  </div>
+</section>
+
+<section class="sec" id="cursos">
+  <div class="sec-in">
+    <div class="sec-hd"><h2>Cursos técnicos</h2></div>
+    <div class="crgrid" id="crGrid"></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contact-sec" id="contacto">
+  <div class="contact-in">
+    <h2>Contacto</h2>
+    <p>Estamos para ayudarte. Consultá por productos, publicaciones o soporte técnico.</p>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ico">📧</div>
+        <strong>Email</strong>
+        <span><a href="mailto:contacto@mercadotecnico.com.ar">contacto@mercadotecnico.com.ar</a></span>
+      </div>
+      <div class="contact-item">
+        <div class="ico">📍</div>
+        <strong>Ubicación</strong>
+        <span>Buenos Aires, Argentina</span>
+      </div>
+    </div>
+    <a id="btnContactoWA" class="btn-wa-contact" href="#" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.178 3.178 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+      Escribinos por WhatsApp
+    </a>
+  </div>
+</section>
+
+<div class="vp">
+  <div class="sec-in">
+    <div class="vpgrid">
+      <div class="vpi"><div class="ico">➕</div><div><strong>Publicá gratis</strong><span>Sin costo inicial.</span></div></div>
+      <div class="vpi"><div class="ico">📈</div><div><strong>Vendé más</strong><span>Miles de técnicos.</span></div></div>
+      <div class="vpi"><div class="ico">🛡️</div><div><strong>Comprá seguro</strong><span>Protección total.</span></div></div>
+      <div class="vpi"><div class="ico">💳</div><div><strong>Pagá como quieras</strong><span>Tarjetas, transferencia.</span></div></div>
+      <div class="vpi"><div class="ico">💬</div><div><strong>Soporte WhatsApp</strong><span>Atención personalizada.</span></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fin">
+    <div class="fgrid">
+      <div class="fbrand">
+        <div class="logo">
+          <div class="logo-box" style="background:var(--y)">
+            <svg viewBox="0 0 24 24" style="fill:var(--b)"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm1 15.93V17a1 1 0 00-2 0v.93A8 8 0 014.07 12H5a1 1 0 000-2h-.93A8 8 0 0111 4.07V5a1 1 0 002 0v-.93A8 8 0 0119.93 10H19a1 1 0 000 2h.93A8 8 0 0113 17.93z"/></svg>
+          </div>
+          <div class="logo-txt">
+            <strong style="color:var(--y)">MERCADO</strong>
+            <span style="color:rgba(255,255,255,.4)">TÉCNICO</span>
+          </div>
+        </div>
+        <p>El marketplace especializado para técnicos, comercios e importadores de refrigeración, lavarropas y cocinas.</p>
+      </div>
+      <div class="fcol"><h5>Comprar</h5><ul><li><a>Refrigeración y Aire</a></li><li><a>Lavarropas</a></li><li><a>Cocinas y Hornos</a></li><li><a>Herramientas</a></li></ul></div>
+      <div class="fcol"><h5>Vender</h5><ul><li><a>Publicar gratis</a></li><li><a>Cómo funciona</a></li><li><a>Planes premium</a></li></ul></div>
+      <div class="fcol"><h5>Ayuda</h5>
+        <ul>
+          <li><a>Centro de ayuda</a></li>
+          <li><a id="footerContacto" data-sec="contacto" style="cursor:pointer">Contacto</a></li>
+          <li><a>Términos</a></li>
+          <li><a>Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbot">
+      <span>© 2026 Mercado Técnico. Todos los derechos reservados. 🇦🇷</span>
+      <button class="admin-gear" id="adminGear">⚙ Administrador</button>
+    </div>
+  </div>
+</footer>
+
+<!-- PRODUCT DETAIL PAGE -->
+<div class="detail-page" id="detailPage">
+  <div class="detail-header">
+    <button class="detail-back" id="detailBack">← Volver</button>
+    <div class="detail-title" id="detailTitle"></div>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modalBox">
+    <button class="mclose" id="mclose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none">
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════════
+// CONFIGURACIÓN — tu número de WhatsApp de soporte
+// Formato: 54 + 9 + código de área + número
+// ══════════════════════════════════════════════════════
+var WA_SOPORTE = '5491123955098';
+
+// ── WA link builder ──────────────────────────────────
+function waLink(rawDigits, msg) {
+  var d = String(rawDigits || '').replace(/\D/g, '');
+  if (d.length === 13 && d.slice(0,3) === '549') { /* ok */ }
+  else if (d.length === 12 && d.slice(0,2) === '54') { d = '549' + d.slice(2); }
+  else { d = d.replace(/^549?/, ''); d = '549' + d; }
+  return 'https://wa.me/' + d + '?text=' + encodeURIComponent(msg || '');
+}
+
+// ── WA SVG icons ─────────────────────────────────────
+var WA_SM = '<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:#fff;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.178 3.178 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>';
+var WA_MD = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a3.178 3.178 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>';
+
+// ══════════════════════════════════════════════════════
+// DATOS
+// ══════════════════════════════════════════════════════
+var products = [
+  {id:1,  name:'Manguera Barrier 3 colores',        price:'$18.500',pn:18500,loc:'Buenos Aires',rat:4.8,rev:128,cat:'refrigeracion',badge:'MÁS VENDIDO',icon:'🔴',photos:[],desc:'Manguera de alta presión para instalaciones de refrigeración. Apta para R32, R410A y R22.',owner:'mt',   wa:'',sellerName:''},
+  {id:2,  name:'Bomba de desagote para lavarropas', price:'$14.200',pn:14200,loc:'Córdoba',     rat:4.6,rev:95, cat:'lavarropas',  badge:'',           icon:'💧',photos:[],desc:'Bomba de desagote universal compatible con las principales marcas.',owner:'mt',wa:'',sellerName:''},
+  {id:3,  name:'Termocupla universal para cocina',  price:'$6.800', pn:6800, loc:'Rosario',     rat:4.7,rev:74, cat:'cocinas',     badge:'OFERTA',     icon:'🌡️',photos:[],desc:'Termocupla de seguridad para cocinas a gas. Universal, largo 600mm.',owner:'mt',wa:'',sellerName:''},
+  {id:4,  name:'Manifold profesional 4 vías',       price:'$45.900',pn:45900,loc:'Buenos Aires',rat:4.5,rev:52, cat:'herramientas',badge:'NUEVO',      icon:'🔧',photos:[],desc:'Manifold profesional para carga y recuperación de gas refrigerante.',owner:'mt',wa:'',sellerName:''},
+  {id:5,  name:'Plaqueta electrónica universal',    price:'$21.300',pn:21300,loc:'Mendoza',     rat:4.4,rev:38, cat:'lavarropas',  badge:'',           icon:'📟',photos:[],desc:'Módulo de control electrónico universal para lavarropas.',owner:'mt',wa:'',sellerName:''},
+  {id:6,  name:'Válvula de seguridad para horno',   price:'$9.750', pn:9750, loc:'La Plata',    rat:4.9,rev:67, cat:'cocinas',     badge:'',           icon:'🔩',photos:[],desc:'Válvula de seguridad termostática para hornos a gas. Rosca 3/8".',owner:'mt',wa:'',sellerName:''},
+  {id:7,  name:'Compresor rotativo 1HP R410A',      price:'$87.000',pn:87000,loc:'Buenos Aires',rat:4.7,rev:41, cat:'refrigeracion',badge:'DESTACADO', icon:'⚙️',photos:[],desc:'Compresor rotativo para equipos de aire acondicionado. 1HP, R410A.',owner:'mt',wa:'',sellerName:''},
+  {id:8,  name:'Kit detector de fugas UV',          price:'$32.400',pn:32400,loc:'Rosario',     rat:4.6,rev:29, cat:'herramientas',badge:'',           icon:'🔍',photos:[],desc:'Kit completo para detección de fugas por luz ultravioleta.',owner:'mt',wa:'',sellerName:''},
+  {id:9,  name:'Rodamiento 6204 ZZ lavarropas',     price:'$3.200', pn:3200, loc:'Córdoba',     rat:4.8,rev:112,cat:'lavarropas',  badge:'MÁS VENDIDO',icon:'🔘',photos:[],desc:'Rodamiento blindado 6204 ZZ de alta duración para tambores de lavarropas.',owner:'mt',wa:'',sellerName:''},
+  {id:10, name:'Panel solar 12V para frigorífico',  price:'$56.000',pn:56000,loc:'Buenos Aires',rat:4.3,rev:18, cat:'refrigeracion',badge:'NUEVO',     icon:'☀️',photos:[],desc:'Panel fotovoltaico 80W para frigoríficos en zonas rurales.',owner:'mt',wa:'',sellerName:''},
+];
+
+var technicians = [
+  {name:'Carlos M.', city:'Buenos Aires',specialty:'Refrigeración · Aire Acondicionado',rat:4.9,rev:87, av:'CM',verified:true, wa:'5491100000001',exp:12},
+  {name:'Sergio R.', city:'Córdoba',      specialty:'Lavarropas · Secarropas',          rat:4.8,rev:64, av:'SR',verified:true, wa:'5493510000001',exp:8},
+  {name:'Ana P.',    city:'Rosario',      specialty:'Cocinas · Hornos',                 rat:4.9,rev:52, av:'AP',verified:true, wa:'5493410000001',exp:10},
+  {name:'Luis F.',   city:'Mendoza',      specialty:'Refrigeración · Frío Industrial',  rat:4.7,rev:43, av:'LF',verified:false,wa:'5492610000001',exp:5},
+];
+
+var courses = [
+  {title:'Refrigeración doméstica desde cero',           inst:'Ing. Pablo Fernández',price:'$12.000',mode:'Online',    icon:'❄️'},
+  {title:'Lavarropas: diagnóstico y reparación avanzada',inst:'Téc. María López',    price:'$9.500', mode:'Online',    icon:'🌀'},
+  {title:'Gas natural y GNC en cocinas industriales',    inst:'Ing. Roberto Díaz',   price:'$15.000',mode:'Presencial',icon:'🍳'},
+  {title:'Herramientas y soldadura de cobre',            inst:'Téc. Jorge Ríos',     price:'Gratis', mode:'Online',    icon:'🔧'},
+];
+
+// ══════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════
+function starsHtml(r, size) {
+  if (!r) return '<span style="font-size:11px;color:var(--gt)">Sin reseñas</span>';
+  var s = size || 12;
+  return '<span style="color:#f59e0b;font-size:'+s+'px">'+('★').repeat(Math.floor(r))+'</span>';
+}
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3400);
+}
+function goTo(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════
+// MODAL (login / tech / publish)
+// ══════════════════════════════════════════════════════
+var overlay   = document.getElementById('overlay');
+var modalBody = document.getElementById('modalBody');
+var modalBox  = document.getElementById('modalBox');
+
+function openModal(html) {
+  modalBody.innerHTML = html;
+  overlay.classList.add('open');
+  modalBox.scrollTop = 0;
+}
+function closeModal() {
+  overlay.classList.remove('open');
+  setTimeout(function(){ modalBody.innerHTML = ''; }, 60);
+}
+document.getElementById('mclose').addEventListener('click', closeModal);
+overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeModal(); closeDetail(); } });
+
+// ══════════════════════════════════════════════════════
+// PRODUCT DETAIL PAGE — full screen, no modal
+// ══════════════════════════════════════════════════════
+var detailPage = document.getElementById('detailPage');
+
+function openDetail(id) {
+  var p = products.find(function(x){ return x.id === id; });
+  if (!p) return;
+
+  var isMT = p.owner === 'mt';
+  document.getElementById('detailTitle').textContent = p.name;
+
+  // Gallery
+  var gallHtml = '';
+  if (p.photos.length) {
+    gallHtml = '<div class="detail-gallery">'
+      + '<img class="detail-main-img" id="dmImg" src="'+p.photos[0]+'" alt="">';
+    if (p.photos.length > 1) {
+      gallHtml += '<div class="detail-thumbs">'
+        + p.photos.map(function(ph,i){
+            return '<img src="'+ph+'" class="'+(i===0?'active':'')+'" data-src="'+ph+'">';
+          }).join('')
+        + '</div>';
+    }
+    gallHtml += '</div>';
+  } else {
+    gallHtml = '<div class="detail-main-emoji">'+p.icon+'</div>';
+  }
+
+  // Badges
+  var badges = '';
+  if (isMT) badges += '<span class="detail-badge mt">🏭 Mercado Técnico</span>';
+  else       badges += '<span class="detail-badge tecnico">👤 '+(p.sellerName||'Técnico')+'</span>';
+  if (p.badge) {
+    var bc = p.badge==='OFERTA'?'offer': p.badge==='NUEVO'||p.badge==='NEW'?'new': p.badge==='DESTACADO'||p.badge==='MÁS VENDIDO'?'featured': 'used';
+    badges += '<span class="detail-badge '+bc+'">'+p.badge+'</span>';
+  }
+
+  // Actions
+  var actions = '';
+  if (isMT) {
+    actions = '<button class="btnblock" style="margin-bottom:11px" id="dpBtnComprar">🛒 Comprar ahora</button>'
+      + '<a class="btnwa-block" href="'+waLink(WA_SOPORTE,'Hola, quiero consultar sobre: '+p.name+' ('+p.price+')')+'" target="_blank" rel="noopener noreferrer">'+WA_MD+' Consultar por WhatsApp</a>';
+  } else {
+    var sw = p.wa || WA_SOPORTE;
+    actions = '<a class="btnwa-block" href="'+waLink(sw,'Hola, vi tu publicación de *'+p.name+'* por *'+p.price+'* en Mercado Técnico. ¿Está disponible?')+'" target="_blank" rel="noopener noreferrer">'+WA_MD+' Contactar al vendedor por WhatsApp</a>';
+  }
+
+  document.getElementById('detailBody').innerHTML =
+    gallHtml
+    + '<div class="detail-badge-row">'+badges+'</div>'
+    + '<div class="detail-price">'+p.price+'</div>'
+    + '<div class="detail-name">'+p.name+'</div>'
+    + '<div class="detail-meta">'
+    +   '<span>📍 '+p.loc+'</span>'
+    + '</div>'
+    + (p.desc ? '<div class="detail-desc">'+p.desc+'</div>' : '')
+    + '<div class="detail-stars">'+starsHtml(p.rat,14)+(p.rev?' <span>('+p.rev+' reseñas)</span>':'')+'</div>'
+    + '<div class="detail-actions" id="detailActions">'+actions+'</div>'
+    + '<div id="dpPayArea"></div>';
+
+  detailPage.classList.add('open');
+  detailPage.scrollTop = 0;
+
+  // Thumb clicks
+  detailPage.querySelectorAll('.detail-thumbs img').forEach(function(th){
+    th.addEventListener('click', function(){
+      document.getElementById('dmImg').src = this.dataset.src;
+      detailPage.querySelectorAll('.detail-thumbs img').forEach(function(x){ x.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+
+  var bc2 = document.getElementById('dpBtnComprar');
+  if (bc2) bc2.addEventListener('click', function(){ openDetailCheckout(p); });
+}
+
+function closeDetail() {
+  detailPage.classList.remove('open');
+}
+
+document.getElementById('detailBack').addEventListener('click', closeDetail);
+document.getElementById('logoHome').addEventListener('click',   function(e){ e.preventDefault(); closeDetail(); goTo('productos'); });
+
+// ── Checkout dentro de la página de detalle ──
+function openDetailCheckout(p) {
+  var area = document.getElementById('dpPayArea');
+  if (!area) return;
+  area.innerHTML =
+    '<div style="margin-top:24px;border-top:1px solid var(--gm);padding-top:20px">'
+    + '<div style="font-size:15px;font-weight:700;margin-bottom:12px">Método de pago</div>'
+    + '<div class="pay-opts">'
+    +   '<div class="pay-opt sel" id="dopt_mp"><div class="pay-opt-ico">💳</div><div class="pay-opt-txt"><strong>Tarjeta / Cuotas / Débito</strong><span>MercadoPago · 100% seguro</span></div></div>'
+    +   '<div class="pay-opt" id="dopt_transfer"><div class="pay-opt-ico">🏦</div><div class="pay-opt-txt"><strong>Transferencia bancaria</strong><span>CBU / Alias</span></div></div>'
+    +   '<div class="pay-opt" id="dopt_efectivo"><div class="pay-opt-ico">💵</div><div class="pay-opt-txt"><strong>Efectivo / Retiro</strong><span>Coordinamos por WhatsApp</span></div></div>'
+    + '</div>'
+    + '<div id="dpDetail"></div><div id="dpBtn"></div>'
+    + '<p class="secure">🔒 Tus datos están protegidos</p>'
+    + '</div>';
+
+  function setM(m){
+    area.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('sel');});
+    document.getElementById('dopt_'+m).classList.add('sel');
+    renderDPDetail(m,p);
+  }
+  document.getElementById('dopt_mp').addEventListener('click',       function(){setM('mp');});
+  document.getElementById('dopt_transfer').addEventListener('click', function(){setM('transfer');});
+  document.getElementById('dopt_efectivo').addEventListener('click', function(){setM('efectivo');});
+  renderDPDetail('mp', p);
+  area.scrollIntoView({behavior:'smooth'});
+}
+
+function renderDPDetail(method, p) {
+  var dEl = document.getElementById('dpDetail');
+  var bEl = document.getElementById('dpBtn');
+  if (!dEl||!bEl) return;
+  if (method==='mp') {
+    dEl.innerHTML = '<div class="pay-detail"><strong>💳 MercadoPago</strong>✔ Tarjetas crédito y débito<br>✔ Hasta 12 cuotas sin interés<br>✔ Cuenta MercadoPago</div>';
+    bEl.innerHTML = '<button class="btnblock" style="background:#009ee3" id="dpBtnMP">Pagar con MercadoPago</button>';
+    document.getElementById('dpBtnMP').addEventListener('click', function(){
+      dEl.innerHTML = '<div class="pay-warn"><strong>⚙️ Activar pagos con tarjeta</strong>Necesitás tu <b>Public Key</b> de MercadoPago. Por ahora coordiná por WhatsApp.</div>';
+      bEl.innerHTML = '<a class="btnwa-block" href="'+waLink(WA_SOPORTE,'Hola, quiero pagar con tarjeta: '+p.name+' ('+p.price+'). ¿Cómo procedo?')+'" target="_blank" rel="noopener noreferrer">'+WA_MD+' Consultar por WhatsApp</a>'
+        +'<button class="btnoutline" style="margin-top:10px" id="dpVolver">← Volver</button>';
+      document.getElementById('dpVolver').addEventListener('click', function(){renderDPDetail('mp',p);});
+    });
+  } else if (method==='transfer') {
+    dEl.innerHTML = '<div class="pay-detail"><strong>🏦 Transferencia</strong><b>Titular:</b> Mercado Técnico S.R.L.<br><b>CBU:</b> 0000000000000000000000<br><b>Alias:</b> MERCADO.TECNICO<br><br>⚠️ Envianos el comprobante por WhatsApp.</div>';
+    bEl.innerHTML = '<a class="btnwa-block" href="'+waLink(WA_SOPORTE,'Hola, quiero pagar por transferencia: '+p.name+' ('+p.price+'). Te mando el comprobante.')+'" target="_blank" rel="noopener noreferrer">'+WA_MD+' Enviar comprobante</a>';
+  } else {
+    dEl.innerHTML = '<div class="pay-detail"><strong>💵 Efectivo / Retiro</strong>Coordinamos día y lugar por WhatsApp.<br><br>📦 Retiro en depósito (Buenos Aires)<br>🚚 También enviamos a domicilio</div>';
+    bEl.innerHTML = '<a class="btnwa-block" href="'+waLink(WA_SOPORTE,'Hola, quiero comprar en efectivo: '+p.name+' ('+p.price+'). ¿Coordinamos?')+'" target="_blank" rel="noopener noreferrer">'+WA_MD+' Coordinar por WhatsApp</a>';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER PRODUCTOS
+// ══════════════════════════════════════════════════════
+var currentCat = '';
+
+function renderProducts(cat) {
+  if (cat !== undefined) currentCat = cat;
+  var list = currentCat ? products.filter(function(p){return p.cat===currentCat;}) : products;
+  var g = document.getElementById('prodGrid');
+
+  if (!list.length) {
+    g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--gt)"><p style="font-size:36px;margin-bottom:10px">📦</p><p>No hay productos en esta categoría.</p></div>';
+    return;
+  }
+
+  g.innerHTML = list.map(buildProductCard).join('');
+
+  // Click → abrir página de detalle (no modal)
+  g.querySelectorAll('.pcard[data-pid]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if (e.target.closest('.btn-wa-card') || e.target.closest('.btn-delete-card')) return;
+      openDetail(+this.dataset.pid);
+    });
+  });
+}
+
+function buildProductCard(p) {
+  var isMT = p.owner === 'mt';
+
+  var imgHtml = p.photos.length
+    ? '<img src="'+p.photos[0]+'" alt="'+p.name+'">'
+    : '<div class="emoji">'+p.icon+'</div>';
+
+  var badgeMT = isMT ? '<span class="pbadge mt">Mercado Técnico</span>' : '';
+
+  var badgeExtra = '';
+  if (p.badge) {
+    var bc = p.badge==='OFERTA'?'offer': p.badge==='NUEVO'||p.badge==='NEW'?'new': p.badge==='DESTACADO'||p.badge==='MÁS VENDIDO'?'featured': 'used';
+    badgeExtra = '<span class="pbadge '+bc+'" style="top:'+(isMT?'28px':'7px')+'">'+p.badge+'</span>';
+  }
+
+  var deleteBtn = adminMode
+    ? '<button class="btn-delete-card" data-pid="'+p.id+'">🗑 Eliminar</button>'
+    : '';
+
+  var footer = '';
+  if (!isMT && p.wa) {
+    var initials = p.sellerName ? p.sellerName.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2) : '?';
+    var waMsg = 'Hola, vi tu publicación de *'+p.name+'* por *'+p.price+'* en Mercado Técnico. ¿Está disponible?';
+    footer = '<div class="pcard-footer">'
+      + '<span class="pseller"><span class="pseller-av">'+initials+'</span>'+p.sellerName+'</span>'
+      + '<a class="btn-wa-card" href="'+waLink(p.wa, waMsg)+'" target="_blank" rel="noopener noreferrer">'+WA_SM+' WA</a>'
+      + '</div>';
+  } else if (isMT) {
+    footer = '<div class="pcard-footer"><span style="font-size:10.5px;color:var(--b);font-weight:700">🏭 Stock propio</span></div>';
+  }
+
+  return '<div class="pcard tipo-'+(isMT?'mt':'tecnico')+'" data-pid="'+p.id+'">'
+    + deleteBtn
+    + '<div class="pimg">'+imgHtml+badgeMT+badgeExtra+'</div>'
+    + '<div class="pbody">'
+    +   '<div class="pname">'+p.name+'</div>'
+    +   '<div class="pprice">'+p.price+'</div>'
+    +   '<div class="ploc">📍 '+p.loc+'</div>'
+    +   '<div class="stars">'+starsHtml(p.rat)+(p.rev?' <span>('+p.rev+')</span>':'')+'</div>'
+    + '</div>'
+    + footer
+    + '</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER TÉCNICOS
+// ══════════════════════════════════════════════════════
+function renderTechnicians(arr) {
+  arr = arr || technicians;
+  var g = document.getElementById('techGrid');
+  if (!arr.length) {
+    g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--gt)"><p style="font-size:36px;margin-bottom:10px">👷</p><p>No se encontraron técnicos con esos filtros.</p></div>';
+    return;
+  }
+  g.innerHTML = arr.map(function(t){
+    var msg = 'Hola '+t.name+', vi tu perfil en Mercado Técnico y necesito un servicio de '+t.specialty.split('·')[0].trim();
+    var rHtml = t.rev>0
+      ? '<div class="stars">'+starsHtml(t.rat)+' <span>('+t.rev+')</span></div>'
+      : '<div style="font-size:11px;color:var(--gt)">Nuevo</div>';
+    var tags = t.specialty.split('·').map(function(s){return '<span class="tag">'+s.trim()+'</span>';}).join('');
+    return '<div class="tcard">'
+      +'<div class="thead2"><div class="tavatar">'+t.av+'</div>'
+      +'<div class="tname"><strong>'+t.name+(t.verified?' ✅':'')+'</strong>'
+      +'<small>📍 '+t.city+'</small>'+(t.exp?'<small>🛠️ '+t.exp+' años</small>':'')+'</div></div>'
+      +'<div class="ttags">'+tags+'</div>'
+      +'<div class="tfoot">'+rHtml
+      +'<a class="btnwa" href="'+waLink(t.wa,msg)+'" target="_blank" rel="noopener noreferrer">'+WA_SM+' Contactar</a>'
+      +'</div></div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER CURSOS
+// ══════════════════════════════════════════════════════
+function renderCourses() {
+  document.getElementById('crGrid').innerHTML = courses.map(function(c){
+    return '<div class="crcard"><div class="crimg"><span>'+c.icon+'</span><span class="crmode">'+c.mode+'</span></div>'
+      +'<div class="crbody"><h4>'+c.title+'</h4><div class="inst">👤 '+c.inst+'</div>'
+      +'<div class="crfoot"><div class="crprice'+(c.price==='Gratis'?' free':'')+'">'+c.price+'</div>'
+      +'<button class="btnprimary" style="font-size:13px;padding:7px 14px">Ver curso</button>'
+      +'</div></div></div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// LOGIN MODAL
+// ══════════════════════════════════════════════════════
+function openLoginModal() {
+  openModal(
+    '<h3>Ingresar</h3><p class="mdesc">Accedé a tu cuenta de Mercado Técnico</p>'
+    +'<div class="mtabs"><button class="mtab active" id="tL">Iniciar sesión</button><button class="mtab" id="tR">Registrarme</button></div>'
+    +'<div id="pL">'
+    +'<div class="fg"><label>Email</label><input class="fi" type="email" placeholder="tu@email.com"></div>'
+    +'<div class="fg"><label>Contraseña</label><input class="fi" type="password" placeholder="••••••••"></div>'
+    +'<button class="btnblock">Ingresar</button>'
+    +'<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--gt)">¿Olvidaste tu contraseña? <a href="#" style="color:var(--b);font-weight:600">Recuperar</a></p>'
+    +'</div>'
+    +'<div id="pR" style="display:none">'
+    +'<div class="frow"><div class="fg"><label>Nombre</label><input class="fi" placeholder="Juan"></div><div class="fg"><label>Apellido</label><input class="fi" placeholder="Pérez"></div></div>'
+    +'<div class="fg"><label>Email</label><input class="fi" type="email" placeholder="tu@email.com"></div>'
+    +'<div class="fg"><label>Contraseña</label><input class="fi" type="password" placeholder="Mínimo 8 caracteres"></div>'
+    +'<div class="fg"><label>Soy</label><select class="fi"><option>Técnico independiente</option><option>Comercio</option><option>Importador</option><option>Particular</option></select></div>'
+    +'<button class="btnblock">Crear cuenta gratis</button>'
+    +'</div>'
+  );
+  document.getElementById('tL').addEventListener('click', function(){ this.classList.add('active'); document.getElementById('tR').classList.remove('active'); document.getElementById('pL').style.display=''; document.getElementById('pR').style.display='none'; });
+  document.getElementById('tR').addEventListener('click', function(){ this.classList.add('active'); document.getElementById('tL').classList.remove('active'); document.getElementById('pR').style.display=''; document.getElementById('pL').style.display='none'; });
+}
+
+// ══════════════════════════════════════════════════════
+// TECH MODAL
+// ══════════════════════════════════════════════════════
+function openTechModal() {
+  openModal(
+    '<h3>Crear perfil de técnico</h3>'
+    +'<p class="mdesc">Gratis. Recibí clientes en tu zona directamente por WhatsApp.</p>'
+    +'<div class="frow"><div class="fg"><label>Nombre *</label><input class="fi" id="tN" placeholder="Juan"></div><div class="fg"><label>Apellido</label><input class="fi" id="tA" placeholder="Pérez"></div></div>'
+    +'<div class="fg"><label>WhatsApp *</label>'
+    +'<div class="ph-wrap"><span class="ph-prefix">+54 9</span><input class="ph-input" id="tW" type="tel" placeholder="11 2345-6789" maxlength="12"></div>'
+    +'<small class="ph-hint">Código de área + número. Ej: 1123456789 (Bs.As.) · 3512345678 (Córdoba)</small></div>'
+    +'<div class="fg"><label>Ciudad</label><select class="fi" id="tC"><option>Buenos Aires</option><option>Córdoba</option><option>Rosario</option><option>Mendoza</option><option>La Plata</option></select></div>'
+    +'<div class="fg"><label>Especialidad</label><select class="fi" id="tE"><option>Refrigeración</option><option>Aire Acondicionado</option><option>Lavarropas</option><option>Cocinas y Hornos</option><option>Frío Industrial</option></select></div>'
+    +'<div class="fg"><label>Años de experiencia</label><input class="fi" id="tX" type="number" min="0" max="60" placeholder="5"></div>'
+    +'<div class="ferr" id="tErr"></div>'
+    +'<button class="btnblock" id="btnGT">Crear perfil gratis ✅</button>'
+  );
+  document.getElementById('btnGT').addEventListener('click', function(){
+    var nombre=document.getElementById('tN').value.trim(), apellido=document.getElementById('tA').value.trim();
+    var waD=document.getElementById('tW').value.replace(/\D/g,'');
+    var ciudad=document.getElementById('tC').value, esp=document.getElementById('tE').value;
+    var exp=parseInt(document.getElementById('tX').value,10)||0, errEl=document.getElementById('tErr');
+    if (!nombre){ errEl.textContent='El nombre es obligatorio.'; errEl.style.display='block'; return; }
+    if (waD.length<10){ errEl.textContent='Ingresá código de área + número.'; errEl.style.display='block'; return; }
+    technicians.unshift({name:nombre+(apellido?' '+apellido.charAt(0)+'.':''),city:ciudad,specialty:esp,rat:0,rev:0,av:(nombre[0]+(apellido?apellido[0]:'')).toUpperCase(),verified:false,wa:waD,exp:exp});
+    overlay.classList.remove('open'); modalBody.innerHTML='';
+    renderTechnicians();
+    showToast('¡Perfil creado! Ya aparecés en el directorio. 🎉');
+    setTimeout(function(){ goTo('tecnicos'); }, 350);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// PUBLISH MODAL
+// ══════════════════════════════════════════════════════
+var uploadedPhotos = [];
+
+function openPublishModal() {
+  uploadedPhotos = [];
+  openModal(
+    '<h3>Publicar producto</h3><p class="mdesc">Gratis. Visible en minutos para miles de técnicos.</p>'
+    +'<div class="fg"><label>Fotos * <span style="font-weight:400;color:var(--gt)">(hasta 8)</span></label>'
+    +'<div id="pzone" class="pzone"><div class="pzico">📷</div><strong>Tocá aquí o arrastrá fotos</strong><small>JPG · PNG · WEBP · máx. 10 MB</small></div>'
+    +'<div id="pgrid" class="pgrid"></div><div id="photoErr" class="photoerr"></div></div>'
+    +'<div class="fg"><label>Título *</label><input class="fi" id="pTit" placeholder="Ej: Compresor Embraco 1/4HP R134a"></div>'
+    +'<div class="frow">'
+    +'<div class="fg"><label>Categoría</label><select class="fi" id="pCat"><option value="refrigeracion">Refrigeración y Aire</option><option value="lavarropas">Lavarropas</option><option value="cocinas">Cocinas y Hornos</option><option value="herramientas">Herramientas</option><option value="usados">Equipos Usados</option></select></div>'
+    +'<div class="fg"><label>Precio ($) *</label><input class="fi" id="pPre" type="number" min="1" placeholder="0"></div>'
+    +'</div>'
+    +'<div class="fg"><label>Condición</label><div class="radio-row"><label class="ropt"><input type="radio" name="cond" value="nuevo" checked> Nuevo</label><label class="ropt"><input type="radio" name="cond" value="usado"> Usado</label><label class="ropt"><input type="radio" name="cond" value="reacondicionado"> Reacondicionado</label></div></div>'
+    +'<div class="fg"><label>Descripción</label><textarea class="fi" id="pDes" rows="3" placeholder="Marca, modelo, compatibilidad..."></textarea></div>'
+    +'<div class="frow">'
+    +'<div class="fg"><label>Ciudad</label><select class="fi" id="pCiu"><option>Buenos Aires</option><option>Córdoba</option><option>Rosario</option><option>Mendoza</option><option>La Plata</option></select></div>'
+    +'<div class="fg"><label>Tu nombre *</label><input class="fi" id="pSN" placeholder="Ej: Carlos M."></div>'
+    +'</div>'
+    +'<div class="fg"><label>Tu WhatsApp *</label>'
+    +'<div class="ph-wrap"><span class="ph-prefix">+54 9</span><input class="ph-input" id="pWA" type="tel" placeholder="11 2345-6789" maxlength="12"></div>'
+    +'<small class="ph-hint">Código de área + número. Ej: 1123456789</small></div>'
+    +'<div class="ferr" id="pErr"></div>'
+    +'<button class="btnblock" id="btnPub">Publicar gratis ✨</button>'
+  );
+
+  var pzone=document.getElementById('pzone');
+  pzone.addEventListener('click', function(){ document.getElementById('photoInput').click(); });
+  pzone.addEventListener('dragover', function(e){ e.preventDefault(); this.classList.add('dragover'); });
+  pzone.addEventListener('dragleave', function(){ this.classList.remove('dragover'); });
+  pzone.addEventListener('drop', function(e){ e.preventDefault(); this.classList.remove('dragover'); addPhotos(Array.from(e.dataTransfer.files).filter(function(f){return f.type.startsWith('image/');})); });
+
+  document.getElementById('btnPub').addEventListener('click', function(){
+    var titulo=document.getElementById('pTit').value.trim();
+    var precio=document.getElementById('pPre').value.trim();
+    var sellerN=document.getElementById('pSN').value.trim();
+    var waD=document.getElementById('pWA').value.replace(/\D/g,'');
+    var cat=document.getElementById('pCat').value, desc=document.getElementById('pDes').value.trim();
+    var ciudad=document.getElementById('pCiu').value;
+    var cond=(document.querySelector('input[name="cond"]:checked')||{value:'nuevo'}).value;
+    var errEl=document.getElementById('pErr');
+    if (!titulo){errEl.textContent='Ingresá un título.';errEl.style.display='block';return;}
+    if (!precio||isNaN(precio)||+precio<=0){errEl.textContent='Ingresá un precio válido.';errEl.style.display='block';return;}
+    if (!sellerN){errEl.textContent='Ingresá tu nombre.';errEl.style.display='block';return;}
+    if (waD.length<10){errEl.textContent='Ingresá tu código de área y número.';errEl.style.display='block';return;}
+    if (!uploadedPhotos.length){errEl.textContent='Agregá al menos una foto.';errEl.style.display='block';return;}
+    var bm={nuevo:'NUEVO',usado:'USADO',reacondicionado:'REACOND.'};
+    products.unshift({id:Date.now(),name:titulo,price:'$'+parseInt(precio).toLocaleString('es-AR'),pn:parseInt(precio),loc:ciudad,rat:0,rev:0,cat:cat,badge:bm[cond]||'',icon:'📦',photos:uploadedPhotos.slice(),desc:desc,owner:'tecnico',wa:waD,sellerName:sellerN});
+    overlay.classList.remove('open'); modalBody.innerHTML='';
+    currentCat=''; renderProducts('');
+    showToast('¡Producto publicado! 🎉');
+    setTimeout(function(){ goTo('productos'); }, 350);
+  });
+}
+
+document.getElementById('photoInput').addEventListener('change', function(){ addPhotos(Array.from(this.files)); this.value=''; });
+
+function addPhotos(files) {
+  var errEl=document.getElementById('photoErr'); if(!errEl) return;
+  var space=8-uploadedPhotos.length; if(space<=0){errEl.textContent='Máximo 8 fotos.';return;}
+  files.slice(0,space).forEach(function(f){
+    if(f.size>10*1024*1024){errEl.textContent='Foto demasiado grande (máx. 10 MB).';return;}
+    var r=new FileReader(); r.onload=function(e){uploadedPhotos.push(e.target.result);refreshPhotoGrid();}; r.readAsDataURL(f);
+  });
+}
+
+function refreshPhotoGrid() {
+  var grid=document.getElementById('pgrid'), zone=document.getElementById('pzone'); if(!grid)return;
+  if(!uploadedPhotos.length){grid.innerHTML='';if(zone)zone.style.display='';return;}
+  if(zone)zone.style.display='none';
+  grid.innerHTML=uploadedPhotos.map(function(src,i){
+    return '<div class="pthumb'+(i===0?' pmain':'')+'"><img src="'+src+'" data-i="'+i+'" alt="">'+(i===0?'<div class="pmainbadge">Principal</div>':'')+'<button class="prmv" data-i="'+i+'">✕</button></div>';
+  }).join('')+(uploadedPhotos.length<8?'<div class="paddmore" id="addMore"><span>+</span><small>Agregar</small></div>':'');
+  grid.querySelectorAll('.pthumb img').forEach(function(img){
+    img.addEventListener('click',function(){var i=+this.dataset.i;if(i===0)return;uploadedPhotos.unshift(uploadedPhotos.splice(i,1)[0]);refreshPhotoGrid();});
+  });
+  grid.querySelectorAll('.prmv').forEach(function(btn){
+    btn.addEventListener('click',function(e){e.stopPropagation();uploadedPhotos.splice(+this.dataset.i,1);refreshPhotoGrid();});
+  });
+  var am=document.getElementById('addMore'); if(am) am.addEventListener('click',function(){document.getElementById('photoInput').click();});
+}
+
+// ══════════════════════════════════════════════════════
+// MODO ADMINISTRADOR
+// Acceso: botón "⚙ Administrador" en el pie de página
+// Contraseña actual: Admin2026*
+// Para cambiarla: reemplazá ADMIN_HASH por btoa('tuClave')
+// ══════════════════════════════════════════════════════
+var ADMIN_HASH = btoa('Admin2026*');
+var adminMode  = false;
+
+function enterAdminMode() {
+  adminMode = true;
+  document.getElementById('adminBar').classList.add('show');
+  document.getElementById('adminGear').classList.add('active');
+  document.getElementById('adminGear').textContent = '⚙ Salir del admin';
+  renderProducts();
+  showToast('✅ Modo administrador activado');
+}
+function exitAdminMode() {
+  adminMode = false;
+  document.getElementById('adminBar').classList.remove('show');
+  document.getElementById('adminGear').classList.remove('active');
+  document.getElementById('adminGear').textContent = '⚙ Administrador';
+  renderProducts();
+  showToast('Modo administrador desactivado');
+}
+
+document.getElementById('adminGear').addEventListener('click', function(){
+  if (adminMode) { exitAdminMode(); return; }
+  openModal(
+    '<h3>Acceso administrador</h3>'
+    +'<p class="mdesc">Ingresá tu contraseña para gestionar publicaciones.</p>'
+    +'<div class="fg"><label>Contraseña</label>'
+    +'<input class="fi" id="adminPass" type="password" placeholder="••••••••" autocomplete="off"></div>'
+    +'<div class="ferr" id="adminErr"></div>'
+    +'<button class="btnblock" id="btnAdminOk">Ingresar</button>'
+  );
+  document.getElementById('adminPass').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('btnAdminOk').click(); });
+  document.getElementById('btnAdminOk').addEventListener('click', function(){
+    var val=document.getElementById('adminPass').value;
+    var errEl=document.getElementById('adminErr');
+    if (!val||val.length<7){ errEl.textContent='La contraseña debe tener más de 6 caracteres.'; errEl.style.display='block'; return; }
+    if (btoa(val)!==ADMIN_HASH){ errEl.textContent='Contraseña incorrecta.'; errEl.style.display='block'; return; }
+    closeModal();
+    enterAdminMode();
+  });
+});
+
+document.getElementById('btnAdminExit').addEventListener('click', exitAdminMode);
+
+// Delegación de eliminación en el grid
+document.getElementById('prodGrid').addEventListener('click', function(e){
+  var btn=e.target.closest('.btn-delete-card');
+  if (!btn||!adminMode) return;
+  e.stopPropagation();
+  var pid=+btn.dataset.pid;
+  if (!btn.dataset.confirm) {
+    btn.textContent='¿Confirmar?';
+    btn.dataset.confirm='1';
+    setTimeout(function(){ if(btn.dataset.confirm){btn.textContent='🗑 Eliminar';delete btn.dataset.confirm;} },3000);
+    return;
+  }
+  products=products.filter(function(p){return p.id!==pid;});
+  renderProducts();
+  showToast('Publicación eliminada.');
+});
+
+// ══════════════════════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════════════════════
+document.querySelectorAll('.nitem[data-cat]').forEach(function(el){
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.nitem').forEach(function(x){x.classList.remove('active');});
+    this.classList.add('active');
+    renderProducts(this.dataset.cat);
+    goTo('productos');
+  });
+});
+document.querySelectorAll('.nitem[data-sec]').forEach(function(el){
+  el.addEventListener('click', function(){ goTo(this.dataset.sec); });
+});
+document.querySelectorAll('.catcard[data-cat]').forEach(function(el){
+  el.addEventListener('click', function(){ renderProducts(this.dataset.cat); goTo('productos'); });
+});
+document.querySelectorAll('.catcard[data-sec]').forEach(function(el){
+  el.addEventListener('click', function(){ goTo(this.dataset.sec); });
+});
+document.querySelectorAll('[data-sec]:not(.nitem):not(.catcard)').forEach(function(el){
+  el.addEventListener('click', function(){ goTo(this.dataset.sec); });
+});
+
+document.getElementById('verTodos').addEventListener('click',    function(){ renderProducts(''); goTo('productos'); });
+document.getElementById('verTodosTech').addEventListener('click',function(){ goTo('tecnicos'); });
+document.getElementById('footerContacto').addEventListener('click',function(){ goTo('contacto'); });
+
+// Búsqueda
+document.getElementById('btnSearch').addEventListener('click', doSearch);
+document.getElementById('searchInput').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
+
+function doSearch() {
+  var q=document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q){ renderProducts(''); return; }
+  var found=products.filter(function(p){
+    return p.name.toLowerCase().indexOf(q)>-1||p.cat.indexOf(q)>-1||(p.desc&&p.desc.toLowerCase().indexOf(q)>-1);
+  });
+  var g=document.getElementById('prodGrid');
+  if (!found.length) {
+    g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--gt)"><p style="font-size:36px;margin-bottom:10px">🔍</p><p>Sin resultados para <strong>'+q+'</strong></p></div>';
+  } else {
+    g.innerHTML=found.map(buildProductCard).join('');
+    g.querySelectorAll('.pcard[data-pid]').forEach(function(el){
+      el.addEventListener('click',function(e){
+        if(e.target.closest('.btn-wa-card')||e.target.closest('.btn-delete-card'))return;
+        openDetail(+this.dataset.pid);
+      });
+    });
+  }
+  goTo('productos');
+}
+
+// Búsqueda técnicos
+document.getElementById('btnBuscarTech').addEventListener('click', function(){
+  var ciudad=document.getElementById('filtCiudad').value, esp=document.getElementById('filtEsp').value;
+  renderTechnicians(technicians.filter(function(t){ return (!ciudad||t.city===ciudad)&&(!esp||t.specialty.indexOf(esp)>-1); }));
+  goTo('tecnicos');
+});
+
+// Botones principales
+document.getElementById('btnLogin').addEventListener('click',    openLoginModal);
+document.getElementById('btnPublicar').addEventListener('click', openPublishModal);
+document.getElementById('btnPublicar2').addEventListener('click',openPublishModal);
+document.getElementById('btnTechModal').addEventListener('click',openTechModal);
+
+// WhatsApp contacto — link directo, sin javascript:
+document.getElementById('btnContactoWA').setAttribute('href',
+  'https://wa.me/'+WA_SOPORTE+'?text='+encodeURIComponent('Hola, quiero contactarme con Mercado Técnico')
+);
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+renderProducts();
+renderTechnicians();
+renderCourses();
+</script>
+</body>
+</html>
